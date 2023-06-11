@@ -1,0 +1,23 @@
+{
+  "name": "zenn_tofucode",
+  "version": "1.0.0",
+  "description": "これは https://zenn.dev/tofucode の記事を管理するためのリポジトリです。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kesasaki/zenn_tofucode.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kesasaki/zenn_tofucode/issues"
+  },
+  "homepage": "https://github.com/kesasaki/zenn_tofucode#readme",
+  "dependencies": {
+    "zenn-cli": "^0.1.143"
+  }
+}
