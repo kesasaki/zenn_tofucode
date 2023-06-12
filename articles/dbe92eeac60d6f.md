@@ -60,8 +60,6 @@ PRを作成しマージした
 こ、こいつ余計なことを・・・！！穴だらけの私の記事に指摘が飛んできてしまうではないか！！
 まぁ誰も反応しないか。
 
-画像どうするんだこれ？
-
 # Zenn記事をVSCodeで書く
 VSCodeで記事を開いて編集しするだけ。mainにマージされたらZennにデプロイされる。
 ![](https://storage.googleapis.com/zenn-user-upload/bfb21daf7cb9-20230612.jpg)
@@ -97,13 +95,32 @@ https://github.com/hediet/vscode-drawio
 
 記事へ埋め込む
 ```
-![](images/sample.drawio.png)
+![](/images/dbe92eeac60d6f/sample.drawio.png)
 ```
-![](images/sample.drawio.png)
+![](/images/dbe92eeac60d6f/sample.drawio.png)
 
 編集
+![](/images/dbe92eeac60d6f/ss2.jpg)
 
+できた。これで以下を達成した。
+1. 修正のたびに画像を差し替える必要がない
+2. 図の画像と管理用ファイルが同じため閲覧用と編集用でURLが同じになり管理が楽
+3. 図作成時にgithubを開きURLをコピーするなどの手間がない
+4. 図ファイルの管理が直感的
 
-できた
+# 画像どうするんだこれ？
+図ではなく普通の画像をZenn記事に貼り付けたい時、github管理していない状態だと「ブラウザの編集画面にドラッグ&ドロップする」という1アクションで画像をZennにアップロードすると同時に記事に埋め込むことができた。
+記事をgithub管理してると執筆時点でZennサーバと繋がっていないため、画像を記事編集とは別でZennにアップロードする（↓）か、
+
+![](/images/dbe92eeac60d6f/ss1.png)
+
+もしくはgithubで画像を管理する（↓）必要がある。
+
+![](/images/dbe92eeac60d6f/ss3.png)
+
+Zennにアップロードだと別ブラウザでZennを開かないといけないので自分はgit管理とした。
 
 # 感想
+図を資料作成と同時に編集したいためだけに執筆環境がガラッと変わってしまったが、目的となる直感的な作図の管理は達成できたし、記事作成の環境がVSCodeになるのはそこまで苦じゃないのでいい感じ。
+
+教えてくれたmskさんありがとう！！
