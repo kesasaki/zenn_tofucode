@@ -120,6 +120,14 @@ https://github.com/hediet/vscode-drawio
 
 Zennにアップロードだと別ブラウザでZennを開かないといけないので自分はgit管理とした。
 
+# 新しい記事の作成
+拡張機能Zenn EditorがZenn用のワークスペース「ZENN CONTENTS」に追加した記事作成ボタンを押す。
+![](/images/dbe92eeac60d6f/ss4.jpg)
+
+参考
+https://zenn.dev/ctrlkeykoyubi/articles/e7d91c5286a409#6.1.-%E8%A8%98%E4%BA%8B%E3%82%92%E6%9B%B8%E3%81%8F%E5%89%8D%E3%81%AE%E6%BA%96%E5%82%99
+
+
 # 感想
 図を資料作成と同時に編集したいためだけに執筆環境がガラッと変わってしまったが、目的となる直感的な作図の管理は達成できたし、記事作成の環境がVSCodeになるのはそこまで苦じゃないのでいい感じ。
 
