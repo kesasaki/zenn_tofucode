@@ -1,5 +1,5 @@
 ---
-title: "よく使うdockerコマンドとdockerfile設定"
+title: "よく使うdockerコマンドとDockerfile設定"
 emoji: "💬"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: 
@@ -11,8 +11,23 @@ published: true
 # 概要
 dockerを勉強するため使い方をまとめていく
 
-# dockerfile
+# Dockerfile
 docker build時にdocker イメージをビルドするために利用するファイル。中身はコマンドで、順次実行しイメージを作成する。
+
+ファイル例(golangのアプリケーションをビルドしている)
+```dockerfile
+FROM golang:latest
+
+WORKDIR /usr/local/app
+
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
+
+COPY . .
+RUN go build -v -o /usr/local/bin/app ./...
+
+CMD ["app"]
+```
 
 | 命令 | 意味 | 備考 |
 | - | - | - |
@@ -30,7 +45,8 @@ https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/builder/
 https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 :::
 
-Github Actionsで利用する場合のDockerfileの注意点
+## Github Actionsで利用する場合のDockerfileの注意点
+Github ActionsでDocker buildを行う場合にはDockerfileの各コマンドに以下の制約がある。
 | 命令 | 注意点 | 備考 |
 | - | - | - |
 | FROM | 公式のDockerイメージを使う。GitHub Actionsは、DockerがサポートするデフォルトのLinuxの機能をサポートする。 |  |
@@ -40,7 +56,7 @@ Github Actionsで利用する場合のDockerfileの注意点
 
 https://docs.github.com/ja/actions/creating-actions/dockerfile-support-for-github-actions
 
-# build
+# docker build
 
 Dockerfile からイメージを構築する。
 
@@ -61,7 +77,7 @@ https://docs.docker.jp/engine/reference/commandline/build.html
 https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/commandline/build/
 :::
 
-# run
+# docker run
 プロセスを隔離（isolated；分離）したコンテナ内（isolated container）で実行する。
 
 ```
