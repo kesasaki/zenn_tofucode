@@ -1,23 +1,28 @@
 ---
-title: "[API構築5] GitHub ActionsでGolang appのdockerビルドとEC2 pushの技術選定"
+title: "[API構築5] コンテナレジストリ, コンテナオーケストレーションツール周りの技術選定"
 emoji: "📘"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: 
-  - "githubpackages"
-  - "dockerhub"
   - "ecr"
-  - "ecs"
-  - "fargate"
+  - "dockerhub"
+  - "githubpackages"
+  - "eks"
+  - "kubernetes"
 published: true
 ---
 # 概要
 [API作るものと構成](https://zenn.dev/tofucode/articles/d216a5d6c75193) の環境構築のために、GitHub ActionsでGolang ApplicationのdockerビルドとEC2デプロイするCI/CDの技術選定を行う。
 
 # 技術選定,調査
+## 前提：使うサーバはAWS(AWSの何かは未決定)
+前提として今までの開発や今後の仕事から、使うサーバはAWSのものと決めている。
+3大クラウド（Azure, AWS, GCP)の中でAWSを使う、と言う話。
+ここはほぼ趣味なので比較はなし。
+なので最終的にEC2, ECS, EKSなどにデプロイする。
 
-## dockerイメージのレジストリ選定（ECR, Github Packages, Docker Hub, Artifactry Registryの比較)
-
-以下の理由でECRで公開リポジトリ利用にする。
+## コンテナレジストリ選定（Docker Hub, ECR, Github Packages, Artifactry Registryの比較)
+コンテナイメージを本番環境にデプロイする際に利用するコンテナレジストリを選定する。
+以下の理由でECR（公開リポジトリ）を利用にする。
 
 | docker image registory | どんなものか |
 | - | - |
@@ -77,8 +82,42 @@ EC2の料金
 https://aws.amazon.com/jp/ecr/pricing/
 :::
 
-## golang imageの選定
+## コンテナオーケストレーションツール選定（Kubernetes, ECS, docker SWARM比較）
+ECSがお手軽でいいかと思っていたが、以下2つの理由でKubernetes + EKSにすることにした。
 
+ - Kubernetesよく聞くので今回の開発で触っておきたい（今まで触ったことがない）
+ - 以下の記事を読んで世の中の流れ的にKubernetesなんだと思った
+
+参考記事。とても面白かったので是非読んでほしい。[Zennのdockerタグ](https://zenn.dev/topics/docker?order=alltime)の中でぶっちぎりにLikeを貰ってるだけはある。
+https://zenn.dev/ttnt_1013/articles/f36e251a0cd24e
+
+決断の元となった記述↓
+ - コンテナオーケストレーションツールは2015年にKubernetes、Docker Swarm、Apache Mesosの3つが有名になった
+ - 2017~8年には3大クラウド（Azure, AWS, GCP)が全てKubernetesに対応しKubernetes一強となった。
+   - AKS(Azure Container Service)
+   - Amazon EKS（Amazon Elastic Container Service for Kubernetes）
+   - GKS（Google Kubernetes Engine）
+
+なるほどクラウド大きな会社はKubernetesを意識しているし、AmazonもKubernetesが主流になると思ってEKS作ったのね、と思った。
+他、実用的な部分の判断材料は以下リンクを参考にした。
+https://qiita.com/MetricFire/items/35a6d1a7297963661a64
+
+まとめ
+
+| コンテナオーケストレーションツール | 今後の覇権 | お手軽さ | 応用 | 開発元 |
+| - | - | - | - | - |
+| Kubernetes | ◎ | ○ | ◎ | オープン（Google） |
+| ECS on Fargate |  | ◎ | ○ | Amazon |
+| docker SWARM |  | ○ | ○ | docker |
+
+:::details その他参考
+https://zenn.dev/esaka/articles/2d117655af1f03cf2444
+https://zenn.dev/gege/articles/80b55c345cc1cb
+https://zenn.dev/akb428/articles/49e51d4db36896
+:::
+
+## golang imageの選定
+dockerでgolangアプリケーションをビルドする際に利用するベースイメージを選定する。
 今回は [Docker Hub](https://hub.docker.com/_/golang) の公式イメージのうち、通常のイメージを利用する。
 理由は容量を抑えるためにalpineにしたかったが、golangのalpineイメージはまだかなり実験的な段階のようで、docker初心者の自分がこのタイミングで手を出すべきではないと判断した。今後dockerイメージを小さくしたい場合に検討する。
 → github actionsでdockerをbuildする場合[alpineは使えない可能性がある](https://docs.github.com/ja/actions/creating-actions/dockerfile-support-for-github-actions#supported-linux-capabilities)。
@@ -105,7 +144,10 @@ https://github.com/slimtoolkit/slim
 Go のディレクトリ構成スタンダート
 https://github.com/golang-standards/project-layout/blob/master/README_ja.md
 
-## ECS on Fargateか？ ECS on EC2か？
+# Appendix
+## ボツ案：ECS on Fargateか？ ECS on EC2か？
+EKSを利用することにしたので以下の検討はボツ。
+
 
 ECSをどう動かすかを決める必要がある。
 https://aws.amazon.com/jp/ecs/
@@ -129,7 +171,7 @@ https://tech.uzabase.com/entry/2022/12/01/175423
 EC2の設定周りが省けるの大変助かる。
 Fargateを採用。
 
-# Appendix
+## Zennで大きな表を見やすくする方法はないものか
 Zennだと横幅が狭すぎて見づらくなったので分割した表。これをZenn上でストレスなく閲覧したい。
 
 | docker image registory | どんなものか | 料金 | 特記事項 | 印象 | 採用 |
