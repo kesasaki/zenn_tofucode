@@ -84,7 +84,7 @@ https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/commandline/
 docker run [オプション] イメージ[:タグ|@ダイジェスト値] [コマンド] [引数...]
 
 例
-docker run -it --rm --name my-running-app my-golang-app
+docker run -it --rm -p 80:3000 --name aichatbot-app-running aichatbot-app
 ```
 
 オプション
@@ -94,6 +94,7 @@ docker run -it --rm --name my-running-app my-golang-app
 | -it | -iと-tを同時に指定する書き方 | コマンド上でrunする場合によくつけるオプション |
 | -i | アタッチされていなくても STDIN は開放し続ける。（= --interactive） |  |
 | -t | 擬似 TTY（標準入出力先） を割り当てる。（= --tty） |  |
+| -p | コンテナ上の公開されたポートをホストシステム上のポートにマッピングする。（= --port） |  |
 | --name | コンテナーに名前を割り当てる |  |
 | -v | ボリュームのバインド・マウント（= --volume） |  |
 | -w | コンテナー内部のワーキングディレクトリ。（--workdir） |  |

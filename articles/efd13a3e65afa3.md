@@ -1,11 +1,11 @@
 ---
-title: "[API構築6] Golang appのdockerビルドと起動"
+title: "[API構築6] Golang appのdockerビルドと起動,レジストリにアップロード"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: 
   - "golang"
   - "docker"
-  - "build"
+  - "githubactions"
   - "Dockerfile"
   - "gin"
 published: true
@@ -31,7 +31,6 @@ https://qiita.com/Syoitu/items/8e7e3215fb7ac9dabc3a
 │   └── main.go
 └── Dockerfile
 ```
-
 
 Dockerfile
 ```Dockerfile
@@ -63,7 +62,7 @@ func main() {
             "message": "hello world",
         })
     })
-    engine.Run(":3001")
+    engine.Run(":3000")
 }
 ```
 
@@ -78,14 +77,24 @@ go mod tidy
 sudo docker build -t aichatbot-app ./
 
 # docker起動
-docker run -it --rm --name aichatbot-app-running aichatbot-app
+docker run -it --rm -p 80:3000 --name aichatbot-app-running aichatbot-app
 ```
 
 できた。
+![](/images/efd13a3e65afa3/ss3.png)
+
+docker Desktop上でも確認できる。
+![](/images/efd13a3e65afa3/ss2.jpg)
+
+イメージサイズは1.2GBだった。まだGinしか入れてないのにこれは先行き不安
 ![](/images/efd13a3e65afa3/ss1.jpg)
 
-ちなみにgin frameworkを含んだ状態で4.8MBだった。
-公式のイメージを使うと1GB近くなる、小さくしても200NB、と言う話だったがまだ小さくていい感じ。
+# ECRに公開レジストリ作成
+
+GitHub ActtionsのECSへのデプロイ方法に従って作業を進める。
+https://docs.github.com/ja/actions/deployment/deploying-to-your-cloud-provider/deploying-to-amazon-elastic-container-service
+
+# docker imageをECRへ登録
 
 # 参考
 https://docs.github.com/ja/actions/automating-builds-and-tests/building-and-testing-go
