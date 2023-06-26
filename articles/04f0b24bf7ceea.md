@@ -10,6 +10,9 @@ topics:
   - "kubernetes"
 published: true
 ---
+
+![](/images/04f0b24bf7ceea/image1.drawio.png)
+
 # 概要
 [API作るものと構成](https://zenn.dev/tofucode/articles/d216a5d6c75193) の環境構築のために、GitHub ActionsでGolang ApplicationのdockerビルドとEC2デプロイするCI/CDの技術選定を行う。
 
