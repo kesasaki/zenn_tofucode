@@ -89,10 +89,8 @@ docker Desktop上でも確認できる。
 イメージサイズは1.2GBだった。まだGinしか入れてないのにこれは先行き不安
 ![](/images/efd13a3e65afa3/ss1.jpg)
 
-
-
-参考
-https://docs.aws.amazon.com/ja_jp/AmazonECR/latest/userguide/docker-push-ecr-image.html
+次
+https://zenn.dev/tofucode/articles/b0f6282c323879
 
 # 参考
 https://docs.github.com/ja/actions/automating-builds-and-tests/building-and-testing-go
