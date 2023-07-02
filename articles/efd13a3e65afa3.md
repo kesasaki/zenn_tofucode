@@ -1,5 +1,5 @@
 ---
-title: "[API構築6] Golang appのdockerビルドと起動,レジストリにアップロード"
+title: "[API構築6] Golang appのdockerビルドと起動"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: 
@@ -89,12 +89,10 @@ docker Desktop上でも確認できる。
 イメージサイズは1.2GBだった。まだGinしか入れてないのにこれは先行き不安
 ![](/images/efd13a3e65afa3/ss1.jpg)
 
-# ECRに公開レジストリ作成
 
-GitHub ActtionsのECSへのデプロイ方法に従って作業を進める。
-https://docs.github.com/ja/actions/deployment/deploying-to-your-cloud-provider/deploying-to-amazon-elastic-container-service
 
-# docker imageをECRへ登録
+参考
+https://docs.aws.amazon.com/ja_jp/AmazonECR/latest/userguide/docker-push-ecr-image.html
 
 # 参考
 https://docs.github.com/ja/actions/automating-builds-and-tests/building-and-testing-go

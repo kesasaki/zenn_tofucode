@@ -100,6 +100,49 @@ docker run -it --rm -p 80:3000 --name aichatbot-app-running aichatbot-app
 | -w | コンテナー内部のワーキングディレクトリ。（--workdir） |  |
 
 :::details 参考
-https://docs.docker.jp/engine/reference/run.html
+https://docs.aws.amazon.com/ja_jp/AmazonECR/latest/userguide/docker-push-ecr-image.html
+https://docs.docker.jp/engine/reference/commandline/push.html
 https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/commandline/run/
+:::
+
+# docker tag
+対象イメージ(TARGET_IMAGE)に元イメージ(SOURCE_IMAGE)を参照するタグをつける。タグ名を指定しないと既存のローカル・バージョンのエイリアス httpd:latest が作成される。
+```
+docker tag SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
+```
+
+↓がめちゃくちゃわかりやすい
+![](/images/ff6c27d6b3cc6d/tagger.jpg)
+https://docs.docker.jp/linux/step_six.html
+
+例
+```
+# ローカルにある ID 「0e5574283393」イメージを「fedora」リポジトリの「version 1.0」とタグ付け
+docker tag 0e5574283393 fedora/httpd:version1.0
+
+# ローカルにある名前が 「httpd」のイメージを、「fedora」リポジトリの「version 1.0」とタグ付け
+docker tag httpd fedora/httpd:version1.0
+
+# ローカルにあるaichatbot-appイメージをECRのaichatbot-repositoryリポジトリに紐づける
+docker tag aichatbot-app public.ecr.aws/j3a2u6t5/aichatbot-repository:latest
+```
+
+:::details 参考
+https://docs.docker.jp/engine/reference/commandline/tag.html
+https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/commandline/tag/
+:::
+
+# docker push
+リポジトリまたはレジストリに対してDockerイメージをプッシュする。
+
+```
+docker push [オプション] NAME[:TAG]
+
+例
+docker push public.ecr.aws/j3a2u6t5/aichatbot-repository:latest
+```
+
+:::details 参考
+https://docs.docker.jp/engine/reference/commandline/push.html
+https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/commandline/push/
 :::
