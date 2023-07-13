@@ -86,15 +86,22 @@ https://aws.amazon.com/jp/ecr/pricing/
 :::
 
 ## コンテナオーケストレーションツール選定（Kubernetes, ECS, docker SWARM比較）
-ECSがお手軽でいいかと思っていたが、以下2つの理由でKubernetes + EKSにすることにした。
+### 結論
+~~ECSがお手軽でいいかと思っていたが、以下2つの理由でKubernetes + EKSにすることにした。~~
+→ ECS使います!!EKSが7000円/月だがECSが0円なので!!
 
  - Kubernetesよく聞くので今回の開発で触っておきたい（今まで触ったことがない）
  - 以下の記事を読んで世の中の流れ的にKubernetesなんだと思った
 
-参考記事。とても面白かったので是非読んでほしい。[Zennのdockerタグ](https://zenn.dev/topics/docker?order=alltime)の中でぶっちぎりにLikeを貰ってるだけはある。
+### 選択肢はEKS / ECS on Fargate
+まず選択肢は以下に絞った。AWSと親和性の高いもの、勉強のために有名どころと言う基準。
+ - EKS(Kubernetes)
+ - ECS on Fargate
+
+有名どころを知る時読んだ記事。とても面白かったので是非読んでほしい。[Zennのdockerタグ](https://zenn.dev/topics/docker?order=alltime)の中でぶっちぎりにLikeを貰ってるだけはある。
 https://zenn.dev/ttnt_1013/articles/f36e251a0cd24e
 
-決断の元となった記述↓
+選定の元となった記述↓
  - コンテナオーケストレーションツールは2015年にKubernetes、Docker Swarm、Apache Mesosの3つが有名になった
  - 2017~8年には3大クラウド（Azure, AWS, GCP)が全てKubernetesに対応しKubernetes一強となった。
    - AKS(Azure Container Service)
@@ -102,22 +109,73 @@ https://zenn.dev/ttnt_1013/articles/f36e251a0cd24e
    - GKS（Google Kubernetes Engine）
 
 なるほどクラウド大きな会社はKubernetesを意識しているし、AmazonもKubernetesが主流になると思ってEKS作ったのね、と思った。
-他、実用的な部分の判断材料は以下リンクを参考にした。
-https://qiita.com/MetricFire/items/35a6d1a7297963661a64
+他、実用的な部分の判断材料は[AWS ECS vs Kubernetes](https://qiita.com/MetricFire/items/35a6d1a7297963661a64)を参考にした。
 
-まとめ
+### 料金の調査
+次に利用料金を調査した。
 
-| コンテナオーケストレーションツール | 今後の覇権 | お手軽さ | 応用 | 開発元 |
-| - | - | - | - | - |
-| Kubernetes | ◎ | ○ | ◎ | オープン（Google） |
-| ECS on Fargate |  | ◎ | ○ | Amazon |
-| docker SWARM |  | ○ | ○ | docker |
+[EKSの料金](https://aws.amazon.com/jp/eks/pricing/)は
+```
+EKS クラスターごとに、1 時間あたり 0.10 USD
+```
+
+EKSを利用する方法を確認したが、クラスターが1つは必要。となると0.1USD x 24hour x 30day = 72USD/月が
+必要。マネタイズ予定がないのに7000円/月は高いのでEKSはボツ。
+
+ECSはFargate上で起動するものとEC2上で起動するものがあり、[ECS自体に料金はかからないがFargateとEC2の利用料金はかかる](https://aws.amazon.com/jp/ecs/pricing/)。後述の章でECS on FargateとECS on EC2を比較しているが、今回はFargateを利用するので[Fargateの料金](https://aws.amazon.com/jp/fargate/pricing/)を検討する。
+
+アジアパシフィック（東京）リージョンだと以下
+CPU 1 時間あたりの vCPU 単位	0.05056USD
+メモリ 1 時間あたりの GB 単位	0.00553USD
+
+[vCPUは0.25, メモリは0.5から設定でき、最低設定だと1240円/月](https://qiita.com/nishinoshake/items/a90c93675b2b9245ffb2)
+
+
+[Fargate-spotだと更に7割減になる](https://shiimanblog.com/engineering/post-1651/)が、Fargate-spotはよく落ちるので上記作者はFargateに戻したとのこと。spotには設定も必要なので、一旦こちらもFargateでやって見て、完了後にspotの設定をして手動再起動が頻発しないか確認する。（使う容量は最低の予定なので、もしかすると手動再起動があまり起こらない可能性もある）
+
+[dockerイメージをECRにプッシュした](articles/b0f6282c323879.md)だとイメージは500MB以下だが、ローカルだと1.2GBだった。うーん0.5GBで行けるのか怪しい気がするが、[Java Web アプリのDockerイメージをECSにデプロイした](https://go-journey.club/archives/16928)でも他いくつかの記事でも0.5GB設定でやっているし、行けるのでは。というか0.5GBでいける説にすがるしかない。
+
+と言うわけで許容範囲なのでECSを採用。
+
+:::details 参考
+https://qiita.com/tonishy/items/fc226da30f6dbb845077
+:::
+
+### まとめ
+
+| コンテナオーケストレーションツール | 採用 | 料金 | 今後の覇権 | お手軽さ | 応用 | 開発元 |
+| - | - | - | - | - | - | - |
+| EKS(Kubernetes) | x | x(7000円/月) | ◎ | ○ | ◎ | Kubernetesはオープン（Google） |
+| ECS on Fargate | ○ | ○(1240円/月) | △ | ◎ | ○ | Amazon |
 
 :::details その他参考
 https://zenn.dev/esaka/articles/2d117655af1f03cf2444
 https://zenn.dev/gege/articles/80b55c345cc1cb
 https://zenn.dev/akb428/articles/49e51d4db36896
 :::
+
+## ECS on Fargateか？ ECS on EC2か？
+ECSをどう動かすかを決める必要がある。
+https://aws.amazon.com/jp/ecs/
+
+|  | ECS on Fargate | ECS on EC2 |
+| - | - | - |
+| どんなものか？ | ホストマシンを意識する必要がなく、vCPUと、メモリの量で課金されるため、お気軽にスタートできる。EC2のレイヤを省略できる、ただし高い。およそ40%くらい高いらしい。（参考記事を参照）| EC2にECSコンテナーエージェントをインストールして、ECSに登録する方式。EC2の制約を考慮する必要がある。 |
+| 値段 | 高い | 安い |
+| 設計での考慮事項 | 少ない | 多い |
+| 運用コスト | 低い | 高い |
+| セキュリティ考慮事項 | 少ない | 多い |
+
+```
+EC2と同等のCPUパフォーマンスをFargateで出そうとすると、コストは40%アップする
+```
+
+参考記事
+https://tech.uzabase.com/entry/2022/12/01/175423
+
+元々1000円くらいしかかからない想定なので多少高くなっても良い。
+EC2の設定周りが省けるの大変助かる。
+Fargateを採用。
 
 ## golang imageの選定
 dockerでgolangアプリケーションをビルドする際に利用するベースイメージを選定する。
@@ -148,31 +206,6 @@ Go のディレクトリ構成スタンダート
 https://github.com/golang-standards/project-layout/blob/master/README_ja.md
 
 # Appendix
-## ボツ案：ECS on Fargateか？ ECS on EC2か？
-EKSを利用することにしたので以下の検討はボツ。
-
-
-ECSをどう動かすかを決める必要がある。
-https://aws.amazon.com/jp/ecs/
-
-|  | ECS on Fargate | ECS on EC2 |
-| - | - | - |
-| どんなものか？ | ホストマシンを意識する必要がなく、vCPUと、メモリの量で課金されるため、お気軽にスタートできる。EC2のレイヤを省略できる、ただし高い。およそ40%くらい高いらしい。（参考記事を参照）| EC2にECSコンテナーエージェントをインストールして、ECSに登録する方式。EC2の制約を考慮する必要がある。 |
-| 値段 | 高い | 安い |
-| 設計での考慮事項 | 少ない | 多い |
-| 運用コスト | 低い | 高い |
-| セキュリティ考慮事項 | 少ない | 多い |
-
-```
-EC2と同等のCPUパフォーマンスをFargateで出そうとすると、コストは40%アップする
-```
-
-参考記事
-https://tech.uzabase.com/entry/2022/12/01/175423
-
-元々1000円くらいしかかからない想定なので多少高くなっても良い。
-EC2の設定周りが省けるの大変助かる。
-Fargateを採用。
 
 ## Zennで大きな表を見やすくする方法はないものか
 Zennだと横幅が狭すぎて見づらくなったので分割した表。これをZenn上でストレスなく閲覧したい。
