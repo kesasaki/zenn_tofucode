@@ -89,3 +89,6 @@ https://docs.aws.amazon.com/ja_jp/AmazonECS/latest/developerguide/task_definitio
 これをブラウザで開くとHello Worldが表示されるはずだが表示されない。
 なぜ・・・
 ![](/images/33e34d7fcdbbdd/ss36.png)
+
+以下の「ポートマッピングに8080を指定した場合は、セキュリティグループの編集から8080ポートへのアクセスを許可しておきましょう。」が必要？
+https://hikari-blog.com/ecr-ecs-deploy-fargate/
