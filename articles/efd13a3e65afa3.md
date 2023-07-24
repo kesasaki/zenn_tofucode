@@ -62,9 +62,11 @@ func main() {
             "message": "hello world",
         })
     })
-    engine.Run(":3000")
+    engine.Run(":8080")
 }
 ```
+
+あらかじめDocker Desktopを起動しておく。
 
 buildとrun
 ```
@@ -74,10 +76,10 @@ go get -u github.com/gin-gonic/gin
 go mod tidy
 
 # docker imageのbuild
-sudo docker build -t aichatbot-app ./
+docker build -t aichatbot-app ./
 
 # docker起動
-docker run -it --rm -p 80:3000 --name aichatbot-app-running aichatbot-app
+docker run -it --rm -p 80:8080 --name aichatbot-app-running aichatbot-app
 ```
 
 できた。
