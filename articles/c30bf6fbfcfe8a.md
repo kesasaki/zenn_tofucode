@@ -35,10 +35,11 @@ SSO start URL [None]: https://XXXXXXXXXXXXX.awsapps.com/start
 SSO region [None]: ap-southeast-2
 SSO registration scopes [None]: sso:account:access
 ### ブラウザが開くのでAWSへログインする
-### 2つ以上AWSアカウントがある場合はここで選択する
+### ブラウザ上で「Allow」ボタンを押す
+### 2つ以上AWSアカウントがある場合はコンソールで選択する
 CLI default client Region [None]: ap-southeast-2
 CLI default output format [None]: json
-CLI profile name [AdministratorAccess-xxxxxxxxxxxxxxx]:
+CLI profile name [PowerUserAccess-588666138300]:
 
 # ECRログイン
 aws ecr-public get-login-password --region us-east-1 --profile PowerUserAccess-588666138300 | docker login --username AWS --password-stdin public.ecr.aws/j3a2u6t5
