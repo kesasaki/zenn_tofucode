@@ -1,5 +1,5 @@
 ---
-title: "[API構築8] ECRのdockerイメージをECSにデプロイ"
+title: "[API構築3] ECRのdockerイメージをECSにデプロイ"
 emoji: "👌"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: 
