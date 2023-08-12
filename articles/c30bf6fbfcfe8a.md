@@ -21,7 +21,7 @@ https://zenn.dev/tofucode/articles/b0f6282c323879
 # 手順
 ECRのSSO start URLを[IAM Identtiy Centerのダッシュボード](https://ap-southeast-2.console.aws.amazon.com/singlesignon/home?region=ap-southeast-2#!/instances/8259577a3b0bdf9a/dashboard)の「AWS アクセスポータルのURL」から取得しておく。
 
-```
+```bash
 # dockerイメージのビルド
 docker build -t aichatbot-app ./
 

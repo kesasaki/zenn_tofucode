@@ -69,7 +69,7 @@ func main() {
 あらかじめDocker Desktopを起動しておく。
 
 buildとrun
-```
+```bash
 # go appの作成
 go mod init aichatbot
 go get -u github.com/gin-gonic/gin
