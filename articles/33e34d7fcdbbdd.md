@@ -90,8 +90,59 @@ https://docs.aws.amazon.com/ja_jp/AmazonECS/latest/developerguide/task_definitio
 なぜ・・・
 ![](/images/33e34d7fcdbbdd/ss36.png)
 
-以下の「ポートマッピングに8080を指定した場合は、セキュリティグループの編集から8080ポートへのアクセスを許可しておきましょう。」が必要？
-https://hikari-blog.com/ecr-ecs-deploy-fargate/
+以下のデフォルトセキュリティグループだとダメ、というやつが原因な気がする。
+https://teratail.com/questions/qefgdqqdm9kooi
+
+以下を参考に新規にVPCを設定しこれを新しいセキュリティグループに設定する。
+https://cloud5.jp/amazon-ecs-mk3/
+
+## VPC作成
+VPCダッシュボード > VPCを作
+
+![](/images/33e34d7fcdbbdd/aa1.jpg)
+
+以下のように設定
+![](/images/33e34d7fcdbbdd/aa2.jpg)
+作成ボタンを押すと以下のように作成される。
+![](/images/33e34d7fcdbbdd/aa3.jpg)
+
+## コンテナに HTTP アクセスを許可するために、セキュリティグループを変更
+デフォルトだと外からのアクセスを全て弾くため弾かないルールを追加する。
+1.左上のVPCでフィルタリング
+2.作成したVPCをクリック
+3.セキュリティグループをクリック
+4.インバウンドのルールを編集をクリック
+5.ルールを追加をクリック
+
+| 項目 | 値 |
+| - | - |
+| タイプ | HTTP |
+| ソース | Anywhere-IPv4 |
+
+![](/images/33e34d7fcdbbdd/aa4.jpg)
+できた。
+![](/images/33e34d7fcdbbdd/aa5.jpg)
+
+## 新VPCを設定した新しいECSクラスタを作成する
+
+![](/images/33e34d7fcdbbdd/aa6.jpg)
+
+できた！！！
+
+![](/images/33e34d7fcdbbdd/aa7.jpg)
+
+やったあ！！
+
+![](/images/33e34d7fcdbbdd/bo.jpg)
+
 
 # 感想
 ECRはログイン周りがダルすぎるからDockerHubに移行しようかな
+→ 移行した
+
+https://zenn.dev/tofucode/articles/26f8f141b84d09
+
+丸一ヶ月はまった(ブラウザからパブリックIPへのアクセス確認ができなかった)原因はデフォルトセキュリティグループがVPC外からのインバウンドトラフィックを通さないためでした。ダッセェww
+VPCの設定などが必要だけど、自分の参考にしたページとかだとアクセスして終わり、という書き方だった。
+AWSはドキュメントが玄人向き、というのはこーゆーことかな。
+
