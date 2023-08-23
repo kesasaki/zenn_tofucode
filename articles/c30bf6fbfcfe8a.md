@@ -37,7 +37,8 @@ SSO registration scopes [None]: sso:account:access
 ### ブラウザが開くのでAWSへログインする
 ### ブラウザ上で「Allow」ボタンを押す
 ### 2つ以上AWSアカウントがある場合はコンソールで選択する
-CLI default client Region [None]: ap-southeast-2
+#CLI default client Region [None]: ap-southeast-2
+CLI default client Region [None]: ap-northeast-1
 CLI default output format [None]: json
 CLI profile name [PowerUserAccess-588666138300]:
 

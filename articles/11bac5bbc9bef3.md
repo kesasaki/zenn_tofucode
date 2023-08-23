@@ -25,7 +25,7 @@ published: true
 | iterm2 | ✅ | 色々設定する |
 | tmux | ✅ | 複数セッションをコマンドで切り替え。これがないと始まらない |
 | vim | ✅ | VSCodeがメインだが、ちょっと見る時便利。 |
-| VSCode | ✅ | 前職ではIntelliJだったが私用でこれを使うのでギフティでもVSCodeかな。 |
+| VSCode | ✅ | 前職ではIntelliJだったが私用でこれを使うので転職先でもVSCodeかな。 |
 | Xcode | ✅ | gitコマンドからの依存のため入れる。依存のためmacOS13(Venture)にした。 |
 | Sublime Text4 | ✅ | メモ帳がわりに入れる。超便利。 |
 | MySQL Workbench | ✅ | OracleSQLDeveloperライクにMySQLを扱いたいので導入。 |
