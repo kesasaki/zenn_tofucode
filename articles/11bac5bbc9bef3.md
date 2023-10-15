@@ -67,6 +67,7 @@ https://code.visualstudio.com/download
 | http://Draw.io integration | Draw.io用のプラグイン |
 | Japanese Language Pack for Visual | VSCode日本語化プラグイン |
 | Go用パッケージ | 開発環境構築で入れる。開発環境構築はZennには書かない。|
+|HashiCorp Terraform| Terraform用プラグイン |
 
 # MySQL Workbench
 Oracleでは Oracle SQL Developer が便利だったが、ほぼ同等の機能のものがMySQL Workbench のようなので入れる。
